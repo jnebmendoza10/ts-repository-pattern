@@ -1,8 +1,8 @@
-export class NotContentError extends Error{
+export class NoContentError extends Error{
     private static readonly message = "No content";
 
     constructor(){
-        super(NotContentError.message);
+        super(NoContentError.message);
         this.stack = new Error().stack;
     }
 }

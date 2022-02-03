@@ -1,41 +1,31 @@
-import { SqlUserRepository } from "../repository/SqlUserRepository";
-import { UserRepository } from "../repository/interfaces/UserRepository";
-import { User } from "../models/UserModel";
+import { IUserRepository } from "../repositories/interfaces/IUserRepository";
+import { User } from "../models/User";
+import { inject, injectable } from "inversify";
+import { types } from "../di-config/types";
 
 
- class UserService {
+@injectable()
+export class UserService {
 
-    private readonly _user : UserRepository;
+    constructor( @inject(types.UserRepository) private readonly userRepository: IUserRepository){}
 
-    constructor(){
-      this._user = new SqlUserRepository();
+    async addUser(item: User): Promise<User> {
+      const user = await this.userRepository.addUser(item);
+      return user
     }
-
-    create (item: User){
-        this._user.create(item);
-     }
- 
-    update(id: string, item: User){
-        this._user.update(id, item);
-     }
- 
-    delete(id: string){
-        this._user.delete(id);
-     }
- 
-    find(){
-        return this._user.find();
-     }
- 
-    findOne(id: string){
-        return this._user.findOne(id);
-     }
-
-     getAllMinorAge(){
-        return this._user.getAllMinorAge();
-     }
-
-
+    async getAllUsers(): Promise<User[]> {
+      const users = await this.userRepository.getAllUsers();
+      return users;
+    }
+    async getOneUser(_id: string): Promise<User> {
+      const user = await this.userRepository.getOneUser(_id);
+      return user;
+    }
+    async editUser(_id: string, item: User): Promise<void> {
+      await this.userRepository.editUser(_id, item);
+    }
+    async deleteUser(_id: string): Promise<void> {
+      await this.userRepository.deleteUser(_id);
+    }
+    
 }
-
-export default new UserService();

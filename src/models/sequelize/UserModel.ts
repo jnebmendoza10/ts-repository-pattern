@@ -1,17 +1,9 @@
-import { Model, DataTypes, ModelStatic } from "sequelize";
-import sequelize from "../utils/sqlConnection";
+import { DataTypes } from "sequelize";
+import sequelize from "../../utils/sequelizeDbConnection";
+import { SequelizeUser } from "./SequelizeUser";
 
 
-
-export interface User extends Model {
-    id: number,
-    name: string,
-    age: number,
-}
-
-
-
-export const UserModel = <ModelStatic<User>>sequelize.define('User', {
+export const UserModel = sequelize.define<SequelizeUser>('User', {
     id:{
         primaryKey: true,
         type: DataTypes.INTEGER,

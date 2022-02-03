@@ -1,0 +1,174 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: UserCreationAPI
+  description: 'Implements CRUD Operations for User '
+  contact:
+    name: Bernard Benedict R. Mendoza
+    email: jneb_zzihw01@outlook.com
+
+
+paths:
+  /register:
+    post:
+      description: Registers a new user
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User' 
+              
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse' 
+                
+             
+        500:
+          description: Internal Server Error
+          
+  /users:
+    get:
+      description: Returns all users
+      responses:
+        200:
+          description: Users fetched
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse' 
+        204:
+          description: Users are not yet created
+        
+        500:
+          description: Internal Server Error       
+  
+  /user/{userId}:
+    get:
+      description: Returns user by its id
+      parameters: 
+        - name: userId
+          in: path
+          required: true
+          description: The id of the user
+          schema:
+            type: string
+            example: 1
+        
+          
+      responses:
+        200:
+          description: User fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        400:
+          description: Invalid request
+          
+        404:
+          description: User not found
+        
+        500:
+          description: Internal Server Error
+  
+  /edit/user/{userId}:
+    patch:
+      description: Edits selected user
+      parameters:
+        - name: userId
+          in: path
+          description: id of user to be edited
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User' 
+      
+      responses:
+        200:
+          description: User updated successfully
+        
+        400:
+          description: Invalid request
+        
+        500:
+          description: Internal Server Error
+          
+        
+      
+  
+    
+  /delete/user/{userId}:
+    delete:
+      description: Deletes selected user
+      parameters:
+        - name: userId
+          in: path
+          description: id of user to be deleted
+          required: true
+          schema:
+            type: string
+      
+      responses:
+        200:
+          description: User deleted
+        
+        400:
+          description: Invalid request
+        
+        500:
+          description: Internal Server Error
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - age
+      properties:
+        id:
+          readOnly: true
+          type: integer
+          
+        name:
+          type: string
+          example: Rody Baldwin
+        
+        age:
+          type: integer
+          example: 35
+    
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        
+        name:
+          type: string
+          example: Rody Baldwin
+        
+        age:
+          type: integer
+          example: 35
+        
+        createdAt:
+          type: string
+          example: 2022-02-02T03
+        
+        updatedAt:
+          type: string
+          example: 2022-02-02T03

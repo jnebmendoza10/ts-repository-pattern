@@ -1,17 +1,22 @@
-import express from "express";
-import user from "../controller/UserController";
-//import { validateResource } from "../middleware/validateResource";
-//import { UserDto } from "../models/DTO/UserDto"; not yet complete
+import express from 'express';
+import { myContainer } from '../di-config/inversify.config';
+import { UserController } from '../controllers/UserController';
+import { types } from '../di-config/types';
+import { UserService } from '../services/UserService';
+
 
 const router = express.Router();
 
+const service  = myContainer.get<UserService>(UserService);
 
-router.get('/users', user.find);
-router.get('/users/:id', user.findONe)
-router.get('/users/minor', user.getAllMinors)
-router.post('/register',  user.create);
-router.patch('/users/:id', user.update);
-router.delete('/users/:id', user.delete);
+const userController = new UserController(service);
+
+router.post('/register', userController.addUser);
+router.get('/users', userController.getAllUsers);
+router.get('/user/:userId?', userController.getOneUser);
+router.patch('/edit/user/:userId?', userController.editUser);
+router.delete('/delete/user/:userId?', userController.deleteUser);
 
 
 export default router;
+
